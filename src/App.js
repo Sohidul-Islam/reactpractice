@@ -2,24 +2,39 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Person></Person>
+      <Person></Person>
     </div>
   );
 }
 
+function Person() {
+  const personStyle = {
+    backgroundColor: "beige",
+    color: "black",
+    margin: "20px",
+    padding: "20px",
+    borderRadius: "20px",
+    border: "1px solid black",
+  }
+  return (
+    // <div className="person-box"> adding className as person box
+    // <div style={personStyle}> adding style object
+    // <div style={{write style here}}>
+    <div style={{
+      backgroundColor: "beige",
+      color: "black",
+      margin: "20px",
+      padding: "20px",
+      borderRadius: "20px",
+      border: "1px solid black",
+    }}>
+      <h1>Name: Sohidul Islam</h1>
+      <h3>Profession: Developer</h3>
+    </div>
+  );
+}
 export default App;
