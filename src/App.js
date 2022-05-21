@@ -1,41 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from "react"
 
 function App() {
 
   return (
     <div className="App">
-      <Person name="Sohidul Islam" profession="Web developer" ></Person>
-      <Person name="Owahidul Hoque Chowdhury" profession="App developer"></Person>
-      <Person name="Kaium Uddin" profession="Web devloper"></Person>
+      <Counter><h1>hello</h1></Counter>
     </div >
   );
 }
 
-function Person(props) {
-  // const personStyle = {
-  //   backgroundColor: "beige",
-  //   color: "black",
-  //   margin: "20px",
-  //   padding: "20px",
-  //   borderRadius: "20px",
-  //   border: "1px solid black",
-  // }
+
+function Counter() {
+  const [counter, setCounter] = useState(0);
+  //counter as a variable
+  //setCounter as function that change the state variable.
+  const incrementCounter = () => {
+    //  method 1
+    // setCounter(counter + 1)
+    const newCounter = counter + 1;
+    // method 2
+    setCounter(newCounter)
+  }
+  const decrementCounter = () => {
+    setCounter(counter - 1)
+  }
   return (
-    // <div className="person-box"> adding className as person box
-    // <div style={personStyle}> adding style object
-    // <div style={{write style here}}>
-    <div style={{
-      backgroundColor: "beige",
-      color: "black",
-      margin: "20px",
-      padding: "20px",
-      borderRadius: "20px",
-      border: "1px solid black",
-    }}>
-      <h1>Name: {props.name}</h1>
-      <h3>Profession: {props.profession}</h3>
+    <div>
+      <h1>Counte: {counter}</h1>
+      {/* method 1 */}
+      {/* <button onClick={incrementCounter}>Increased</button> */}
+      {/* method 2 */}
+      <button onClick={() => {
+        setCounter(counter - 1)
+      }}>Increased</button>
+      <button onClick={decrementCounter}>Decreased</button>
     </div>
-  );
+  )
 }
 export default App;
+
