@@ -17,7 +17,13 @@ const Countries = () => {
         <div>
             <h1>This is a country</h1>
             <div className="countries-container">
-                {countries.map((country, key) => <Country key={key} country={country.name.common} official={country.name.official} img={country.flags.png}></Country>)}
+                {/* method 1 */}
+                {/* {countries.map((country, key) => <Country key={key} country={country.name.common} official={country.name.official} img={country.flags.png}></Country>)} */}
+
+                {/* method 2 */}
+                {countries.map((country, key) => <Country
+                    key={key}
+                    country={country} ></Country>)}
             </div>
 
         </div>
