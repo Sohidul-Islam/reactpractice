@@ -1,0 +1,9 @@
+.person-box {
+  background-color: beige;
+  max-height: 500px;
+  color: black;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid black;
+}

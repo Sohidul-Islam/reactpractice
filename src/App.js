@@ -1,43 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
-import { useEffect, useState } from "react"
+import Countries from './components/Countries/Countries';
 
 function App() {
 
   return (
     <div className="App">
-      <ExternalUsers></ExternalUsers>
+      <Countries />
     </div >
   );
 }
 
-function ExternalUsers() {
-  //1st step
-  const [users, setUsers] = useState([])
-  // use useEffect function to data load.
-  useEffect(() => {
-    console.log("inside use effect");
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(response => response.json())
-      .then(data => setUsers(data))
-
-    console.log("Users: ", users);
-  }, [])
-  return (
-    <div><h2>External Users</h2>
-      {users.map(user => <Users name={user.name} email={user.email} city={user.address.city}></Users>)}
-    </div>
-  )
-}
-
-
-function Users(props) {
-  return (<div className="person-box">
-    <h3>Name: {props.name}</h3>
-    <h3>Email: {props.email}</h3>
-    <h3>City: {props.city}</h3>
-  </div>)
-}
 
 export default App;
 
@@ -68,4 +40,34 @@ export default App;
 //       <button onClick={decrementCounter}>Decreased</button>
 //     </div>
 //   )
+// }
+
+
+
+// function ExternalUsers() {
+//   //1st step
+//   const [users, setUsers] = useState([])
+//   // use useEffect function to data load.
+//   useEffect(() => {
+//     console.log("inside use effect");
+//     fetch("https://jsonplaceholder.typicode.com/users")
+//       .then(response => response.json())
+//       .then(data => setUsers(data))
+
+//     console.log("Users: ", users);
+//   }, [])
+//   return (
+//     <div><h2>External Users</h2>
+//       {users.map(user => <Users name={user.name} email={user.email} city={user.address.city}></Users>)}
+//     </div>
+//   )
+// }
+
+
+// function Users(props) {
+//   return (<div className="person-box">
+//     <h3>Name: {props.name}</h3>
+//     <h3>Email: {props.email}</h3>
+//     <h3>City: {props.city}</h3>
+//   </div>)
 // }
