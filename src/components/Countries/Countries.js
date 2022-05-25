@@ -3,9 +3,7 @@ import Country from '../Country/Country';
 import "./Countries.css";
 
 const Countries = () => {
-
     const [countries, setCountries] = useState([])
-
     useEffect(() => {
         fetch("https://restcountries.com/v3.1/all")
             .then(res => res.json())
@@ -19,13 +17,11 @@ const Countries = () => {
             <div className="countries-container">
                 {/* method 1 */}
                 {/* {countries.map((country, key) => <Country key={key} country={country.name.common} official={country.name.official} img={country.flags.png}></Country>)} */}
-
                 {/* method 2 */}
                 {countries.map((country, key) => <Country
                     key={key}
                     country={country} ></Country>)}
             </div>
-
         </div>
     );
 };

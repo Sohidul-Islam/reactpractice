@@ -1,10 +1,12 @@
 import './App.css';
 import Countries from './components/Countries/Countries';
+import ExportTesting from './components/ExportTesting/ExportTesting';
 
 function App() {
 
   return (
     <div className="App">
+      <ExportTesting></ExportTesting>
       <Countries />
     </div >
   );
