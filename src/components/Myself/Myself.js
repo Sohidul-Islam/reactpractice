@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { NameContext } from '../../App';
 
-const Myself = (props) => {
-    const { house } = props;
-    const name = useContext(NameContext);
+const Myself = () => {
+    const [name, house] = useContext(NameContext);
     console.log(name);
     return (
         <div>

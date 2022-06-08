@@ -23,7 +23,7 @@ function App() {
   }
   return (
 
-    <NameContext.Provider value={nameMe}>
+    <NameContext.Provider value={[nameMe, house]}>
       <div className="App">
         {/* <ConditionalRendering testing=""></ConditionalRendering>
       <ExportTesting></ExportTesting>
@@ -31,7 +31,7 @@ function App() {
         <button onClick={incrementCounter}>House(+)</button>
         <button onClick={decrementCounter}>House(-)</button>
         {/* <GrandFather name={nameMe} house={house}></GrandFather> */}
-        <GrandFather house={house}></GrandFather>
+        <GrandFather></GrandFather>
       </div >
     </NameContext.Provider>
 
