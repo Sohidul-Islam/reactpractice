@@ -1,17 +1,32 @@
 import './App.css';
-import ConditionalRendering from './components/ConditionalRendering/ConditionalRendering';
-import Countries from './components/Countries/Countries';
-import ExportTesting from './components/ExportTesting/ExportTesting';
+// import ConditionalRendering from './components/ConditionalRendering/ConditionalRendering';
+// import Countries from './components/Countries/Countries';
+// import ExportTesting from './components/ExportTesting/ExportTesting';
 import GrandFather from './components/GrandFather/GrandFather';
+import { useState } from 'react';
 
 function App() {
-
+  const [house, setHouse] = useState(0);
+  const nameMe = "Sohidul Islam";
+  const incrementCounter = () => {
+    const newState = house + 1;
+    setHouse(newState);
+  }
+  const decrementCounter = () => {
+    let newState = house - 1;
+    if (newState < 0) {
+      newState = 0;
+    }
+    setHouse(newState);
+  }
   return (
     <div className="App">
       {/* <ConditionalRendering testing=""></ConditionalRendering>
       <ExportTesting></ExportTesting>
       <Countries /> */}
-      <GrandFather></GrandFather>
+      <button onClick={incrementCounter}>House(+)</button>
+      <button onClick={decrementCounter}>House(-)</button>
+      <GrandFather name={nameMe} house={house}></GrandFather>
     </div >
   );
 }
