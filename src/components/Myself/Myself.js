@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { NameContext } from '../../App';
 
 const Myself = (props) => {
-    const { house, name } = props;
+    const { house } = props;
+    const name = useContext(NameContext);
+    console.log(name);
     return (
         <div>
             <h1>Myself</h1>

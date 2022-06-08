@@ -3,11 +3,13 @@ import './App.css';
 // import Countries from './components/Countries/Countries';
 // import ExportTesting from './components/ExportTesting/ExportTesting';
 import GrandFather from './components/GrandFather/GrandFather';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
+
+export const NameContext = createContext("name");
 
 function App() {
   const [house, setHouse] = useState(0);
-  const nameMe = "Sohidul Islam";
+  const nameMe = "Sohidul Islam Shufol";
   const incrementCounter = () => {
     const newState = house + 1;
     setHouse(newState);
@@ -20,14 +22,19 @@ function App() {
     setHouse(newState);
   }
   return (
-    <div className="App">
-      {/* <ConditionalRendering testing=""></ConditionalRendering>
+
+    <NameContext.Provider value={nameMe}>
+      <div className="App">
+        {/* <ConditionalRendering testing=""></ConditionalRendering>
       <ExportTesting></ExportTesting>
       <Countries /> */}
-      <button onClick={incrementCounter}>House(+)</button>
-      <button onClick={decrementCounter}>House(-)</button>
-      <GrandFather name={nameMe} house={house}></GrandFather>
-    </div >
+        <button onClick={incrementCounter}>House(+)</button>
+        <button onClick={decrementCounter}>House(-)</button>
+        {/* <GrandFather name={nameMe} house={house}></GrandFather> */}
+        <GrandFather house={house}></GrandFather>
+      </div >
+    </NameContext.Provider>
+
   );
 }
 
