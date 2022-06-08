@@ -1,4 +1,5 @@
 import './App.css';
+import ConditionalRendering from './components/ConditionalRendering/ConditionalRendering';
 import Countries from './components/Countries/Countries';
 import ExportTesting from './components/ExportTesting/ExportTesting';
 
@@ -6,6 +7,7 @@ function App() {
 
   return (
     <div className="App">
+      <ConditionalRendering testing=""></ConditionalRendering>
       <ExportTesting></ExportTesting>
       <Countries />
     </div >

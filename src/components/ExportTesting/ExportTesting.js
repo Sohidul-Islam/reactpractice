@@ -12,7 +12,7 @@ const ExportTesting = () => {
     return (
         <div>
             <h1>{number1 + " and " + number2 + " addition = " + addition}</h1>
-            <h1>{number1 + " and " + number2 + "substraction = " + substraction}</h1>
+            <h1>{number1 + " and " + number2 + " substraction = " + substraction}</h1>
             <h1>{number1 + " and " + number2 + " Muliplication = " + multiplication}</h1>
             <h1>{number1 + " and " + number2 + " Division = " + division}</h1>
         </div>
@@ -20,3 +20,5 @@ const ExportTesting = () => {
 };
 
 export default ExportTesting;
+
+
