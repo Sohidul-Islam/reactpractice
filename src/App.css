@@ -2,6 +2,12 @@
   text-align: center;
 }
 
+.App div {
+  border: 1px solid goldenrod;
+  margin: 16px;
+  padding: 8px;
+  border-radius: 8px;
+}
 /* .App-logo {
   height: 40vmin;
   pointer-events: none;
