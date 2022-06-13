@@ -4,11 +4,20 @@ import './App.css';
 // import ExportTesting from './components/ExportTesting/ExportTesting';
 import GrandFather from './components/GrandFather/GrandFather';
 import { createContext, useState } from 'react';
+import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
+import firebaseAuthentication from './FirebaseApp/Firebase.initialize';
 
+
+
+
+firebaseAuthentication();
+const googleProvider = new GoogleAuthProvider();
+const gitProvider = new GithubAuthProvider();
+const auth = getAuth();
 export const NameContext = createContext("name");
-
 function App() {
   const [house, setHouse] = useState(0);
+  const [user, setUser] = useState({});
   const nameMe = "Sohidul Islam Shufol";
   const incrementCounter = () => {
     const newState = house + 1;
@@ -21,6 +30,96 @@ function App() {
     }
     setHouse(newState);
   }
+
+  const handleGoogleSignIn = () => {
+
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const Loginuser = result.user;
+
+
+        // console.log("Credential: ", credential);
+        // console.log("Token: ", token);
+        // console.log("User: ", Loginuser);
+
+        const { displayName, email, photoURL, emailVerified } = Loginuser;
+        console.log("User name; ", displayName);
+        console.log("User email; ", email);
+        console.log("User photoURL; ", photoURL);
+        console.log("User emailVerified; ", emailVerified);
+        const newUser = {
+          name: displayName,
+          email: email,
+          img: photoURL,
+          isVarified: emailVerified ? "true" : "false"
+        }
+        setUser(newUser)
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+        console.log(errorMessage);
+      });
+  }
+  const handleGitSignIn = () => {
+
+    signInWithPopup(auth, gitProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GithubAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const Loginuser = result.user;
+
+        console.log("Login user: ", Loginuser);
+        // console.log("Credential: ", credential);
+        // console.log("Token: ", token);
+        // console.log("User: ", Loginuser);
+
+        const { displayName, email, photoURL, emailVerified } = Loginuser;
+        console.log("User name; ", displayName);
+        console.log("User email; ", email);
+        console.log("User photoURL; ", photoURL);
+        console.log("User emailVerified; ", emailVerified);
+        const newUser = {
+          name: displayName,
+          email: email,
+          img: photoURL,
+          isVarified: emailVerified ? "true" : "false"
+        }
+        setUser(newUser)
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+        console.log(errorMessage);
+      });
+  }
+
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      console.log("Sign Out Successful");
+      setUser({})
+    }).catch((error) => {
+      console.log("Sign Out failed");
+    });
+  }
   return (
 
     <NameContext.Provider value={[nameMe, house]}>
@@ -28,10 +127,23 @@ function App() {
         {/* <ConditionalRendering testing=""></ConditionalRendering>
       <ExportTesting></ExportTesting>
       <Countries /> */}
-        <button onClick={incrementCounter}>House(+)</button>
-        <button onClick={decrementCounter}>House(-)</button>
+        {/* <button onClick={incrementCounter}>House(+)</button>
+        <button onClick={decrementCounter}>House(-)</button> */}
         {/* <GrandFather name={nameMe} house={house}></GrandFather> */}
-        <GrandFather></GrandFather>
+        {/* <GrandFather></GrandFather> */}
+
+        <button onClick={handleGoogleSignIn}>Sign In Google</button>
+        <button onClick={handleGitSignIn}>Sign In Github</button>
+        <button onClick={handleSignOut}>Sign Out</button>
+
+        {user && <div>
+          {user.name && <h1>Name: {user.name}</h1>}
+          {user.email && <h3>Email: {user.email}</h3>}
+          {user.isVarified && <h3>Varified: {user.isVarified}</h3>}
+          {user.img && <img src={user.img} alt="" />}
+
+        </div>}
+
       </div >
     </NameContext.Provider>
 
