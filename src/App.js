@@ -6,19 +6,38 @@ import GrandFather from './components/GrandFather/GrandFather';
 import { createContext, useState } from 'react';
 import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
 import firebaseAuthentication from './FirebaseApp/Firebase.initialize';
+import Loginform from './components/Form/Loginform';
 
 
 
-
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+// firbase authentication setup
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
 firebaseAuthentication();
 const googleProvider = new GoogleAuthProvider();
 const gitProvider = new GithubAuthProvider();
 const auth = getAuth();
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
 export const NameContext = createContext("name");
 function App() {
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
+  // set some useState here
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
   const [house, setHouse] = useState(0);
   const [user, setUser] = useState({});
   const nameMe = "Sohidul Islam Shufol";
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
+  // handle some increment decrementCounter function
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
   const incrementCounter = () => {
     const newState = house + 1;
     setHouse(newState);
@@ -31,7 +50,14 @@ function App() {
     setHouse(newState);
   }
 
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
+  //handling google sign in
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
+
   const handleGoogleSignIn = () => {
+
 
     signInWithPopup(auth, googleProvider)
       .then((result) => {
@@ -71,6 +97,8 @@ function App() {
         console.log(errorMessage);
       });
   }
+
+  // handling git hub popup sign in 
   const handleGitSignIn = () => {
 
     signInWithPopup(auth, gitProvider)
@@ -111,7 +139,7 @@ function App() {
         console.log(errorMessage);
       });
   }
-
+  // handling sign out 
   const handleSignOut = () => {
     signOut(auth).then(() => {
       console.log("Sign Out Successful");
@@ -120,6 +148,27 @@ function App() {
       console.log("Sign Out failed");
     });
   }
+  //handling sign up button
+  const handleSignUp = (e) => {
+    console.log("sign up successful");
+    e.preventDefault();
+  }
+  const handleEmail = (e) => {
+    // console.log("sign out successful");
+    console.log(e.target.value);
+    // e.preventDefault();
+  }
+  const handlePassword = (e) => {
+    // console.log("sign out successful");
+    console.log(e.target.value);
+    // e.preventDefault();
+  }
+
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
+  //return and rendering on user interface here.
+  /*----------------------------------------------------------------*/
+  /*----------------------------------------------------------------*/
   return (
 
     <NameContext.Provider value={[nameMe, house]}>
@@ -135,6 +184,9 @@ function App() {
         <button onClick={handleGoogleSignIn}>Sign In Google</button>
         <button onClick={handleGitSignIn}>Sign In Github</button>
         <button onClick={handleSignOut}>Sign Out</button>
+        <br /><br /><br />
+        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword]}></Loginform></div>
+        <br /><br /><br />
 
         {user && <div>
           {user.name && <h1>Name: {user.name}</h1>}
