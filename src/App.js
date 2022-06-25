@@ -3,7 +3,7 @@ import './App.css';
 // import Countries from './components/Countries/Countries';
 // import ExportTesting from './components/ExportTesting/ExportTesting';
 import { createContext, useState } from 'react';
-import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, GoogleAuthProvider, GithubAuthProvider, sendPasswordResetEmail, updateProfile, signOut } from "firebase/auth";
 import firebaseAuthentication from './FirebaseApp/Firebase.initialize';
 import Loginform from './components/Form/Loginform';
 import removeEmailDomain from './components/Utilities/functionsList';
@@ -31,6 +31,7 @@ function App() {
   /*----------------------------------------------------------------*/
   /*----------------------------------------------------------------*/
   const [house, setHouse] = useState(0);
+  const [userName, setUserName] = useState(0);
   const [user, setUser] = useState({});
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -141,7 +142,15 @@ function App() {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        console.log("successfully Logged in", user);
+        console.log("successfully Logged in", user, "photo: ", user.photoURL);
+        setError("")
+        const newUser = {
+          name: userName,
+          email: email,
+          img: user.photoURL,
+          isVarified: user.emailVerified ? "true" : "false"
+        }
+        setUser(newUser)
         // ...
       })
       .catch((error) => {
@@ -157,21 +166,61 @@ function App() {
         console.log("sign up successful");
         console.log(user);
         const newUser = {
-          name: removeEmailDomain(email),
+          name: userName,
           email: email,
           img: null,
-          isVarified: pass ? "true" : "false"
+          isVarified: user.emailVerified ? "true" : "false"
         }
         setUser(newUser)
         setError("success")
+        setInformations()
+        verifyEmail()
       }).catch(e => {
         console.log(e.message);
         setError("email already in use")
       })
   }
+
+  const verifyEmail = () => {
+    console.log("current user: ", auth.currentUser);
+    sendEmailVerification(auth.currentUser)
+      .then((res) => {
+        console.log("response of email: ", res);
+      }).catch(e => {
+        console.log("mail not sent", e.message);
+      });
+  }
+  const setInformations = () => {
+    updateProfile(auth.currentUser, {
+      displayName: userName
+    }).then(() => {
+      console.log("Profile Updated");
+    }).catch((error) => {
+      setError(error.message)
+    });
+  }
+  const resetPassword = () => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        console.log("Pasword Email has been sent");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setError(errorMessage)
+        // ..
+      });
+  }
   const isLoggedInCheck = (e) => {
     setIsLoggedIn(e.target.checked)
     // console.log(e.target.checked);
+  }
+  const handleUserInfo = (e) => {
+    // console.log("sign out successful");
+
+    setUserName(e.target.value)
+    console.log(e.target.value);
+    // e.preventDefault();
   }
   const handleEmail = (e) => {
     // console.log("sign out successful");
@@ -180,6 +229,7 @@ function App() {
     console.log(e.target.value);
     // e.preventDefault();
   }
+
   const handlePassword = (e) => {
     // console.log("sign out successful");
 
@@ -210,7 +260,7 @@ function App() {
         <button onClick={handleGitSignIn}>Sign In Github</button>
         <button onClick={handleSignOut}>Sign Out</button>
         <br /><br /><br />
-        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword, error, isLoggedInCheck, isLoggedIn]}></Loginform></div>
+        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword, error, isLoggedInCheck, isLoggedIn, resetPassword, setInformations, handleUserInfo]}></Loginform></div>
         <br /><br /><br />
 
         {user && <div>
