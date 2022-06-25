@@ -1,10 +1,11 @@
 import React from 'react';
 
 const Loginform = (props) => {
-    const [login, email, pass, error] = props.handleReg;
+    const [login, email, pass, error, isLoggedInCheck, isLoggedIn] = props.handleReg;
 
     return (
         <div className="container">
+            <h1 className="text-primary">Please {isLoggedIn ? "log in" : "sign up"}</h1>
             <form onSubmit={login}>
                 <div className="row mb-3">
                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
@@ -16,6 +17,12 @@ const Loginform = (props) => {
                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>
                     <div className="col-sm-10">
                         <input onBlur={pass} type="password" className="form-control" id="inputPassword3" required />
+                        <div className="form-check mt-3">
+                            <input onChange={isLoggedInCheck} className="form-check-input" type="checkbox" id="gridCheck1" />
+                            <label className="form-check-label" htmlFor="gridCheck1">
+                                Already Registered?
+                            </label>
+                        </div>
                     </div>
                 </div>
                 {(error !== "success" && error) &&
@@ -30,7 +37,7 @@ const Loginform = (props) => {
                             Successfully Registered!!
                         </div></div>
                 }
-                <button type="submit" className="btn btn-primary">Sign in</button>
+                <button type="submit" className="btn btn-primary">{isLoggedIn ? "log in" : "sign up"}</button>
             </form>
         </div>
     );

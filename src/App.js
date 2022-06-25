@@ -3,7 +3,7 @@ import './App.css';
 // import Countries from './components/Countries/Countries';
 // import ExportTesting from './components/ExportTesting/ExportTesting';
 import { createContext, useState } from 'react';
-import { getAuth, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
 import firebaseAuthentication from './FirebaseApp/Firebase.initialize';
 import Loginform from './components/Form/Loginform';
 import removeEmailDomain from './components/Utilities/functionsList';
@@ -35,6 +35,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState("");
   const nameMe = "Sohidul Islam Shufol";
   /*----------------------------------------------------------------*/
   /*----------------------------------------------------------------*/
@@ -91,10 +92,7 @@ function App() {
         console.log("Login user: ", Loginuser);
 
         const { displayName, email, photoURL, emailVerified } = Loginuser;
-        console.log("User name; ", displayName);
-        console.log("User email; ", email);
-        console.log("User photoURL; ", photoURL);
-        console.log("User emailVerified; ", emailVerified);
+
         const newUser = {
           name: displayName,
           email: email,
@@ -133,6 +131,26 @@ function App() {
       setError("Password should be contain two uppercase letters")
       return;
     }
+
+    isLoggedIn ? loginUser(email, pass) : createNewUser(email, pass);
+
+  }
+
+  const loginUser = (email, pass) => {
+    signInWithEmailAndPassword(auth, email, pass)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log("successfully Logged in", user);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setError(errorMessage)
+      });
+  }
+  const createNewUser = (email, pass) => {
     createUserWithEmailAndPassword(auth, email, pass)
       .then(result => {
         const user = result.user;
@@ -150,8 +168,10 @@ function App() {
         console.log(e.message);
         setError("email already in use")
       })
-
-
+  }
+  const isLoggedInCheck = (e) => {
+    setIsLoggedIn(e.target.checked)
+    // console.log(e.target.checked);
   }
   const handleEmail = (e) => {
     // console.log("sign out successful");
@@ -190,7 +210,7 @@ function App() {
         <button onClick={handleGitSignIn}>Sign In Github</button>
         <button onClick={handleSignOut}>Sign Out</button>
         <br /><br /><br />
-        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword, error]}></Loginform></div>
+        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword, error, isLoggedInCheck, isLoggedIn]}></Loginform></div>
         <br /><br /><br />
 
         {user && <div>
