@@ -2,11 +2,11 @@ import './App.css';
 // import ConditionalRendering from './components/ConditionalRendering/ConditionalRendering';
 // import Countries from './components/Countries/Countries';
 // import ExportTesting from './components/ExportTesting/ExportTesting';
-import GrandFather from './components/GrandFather/GrandFather';
 import { createContext, useState } from 'react';
-import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signOut } from "firebase/auth";
 import firebaseAuthentication from './FirebaseApp/Firebase.initialize';
 import Loginform from './components/Form/Loginform';
+import removeEmailDomain from './components/Utilities/functionsList';
 
 
 
@@ -32,23 +32,15 @@ function App() {
   /*----------------------------------------------------------------*/
   const [house, setHouse] = useState(0);
   const [user, setUser] = useState({});
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState("");
   const nameMe = "Sohidul Islam Shufol";
   /*----------------------------------------------------------------*/
   /*----------------------------------------------------------------*/
   // handle some increment decrementCounter function
   /*----------------------------------------------------------------*/
   /*----------------------------------------------------------------*/
-  const incrementCounter = () => {
-    const newState = house + 1;
-    setHouse(newState);
-  }
-  const decrementCounter = () => {
-    let newState = house - 1;
-    if (newState < 0) {
-      newState = 0;
-    }
-    setHouse(newState);
-  }
 
   /*----------------------------------------------------------------*/
   /*----------------------------------------------------------------*/
@@ -63,20 +55,11 @@ function App() {
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
         // The signed-in user info.
         const Loginuser = result.user;
 
-
-        // console.log("Credential: ", credential);
-        // console.log("Token: ", token);
-        // console.log("User: ", Loginuser);
-
         const { displayName, email, photoURL, emailVerified } = Loginuser;
-        console.log("User name; ", displayName);
-        console.log("User email; ", email);
-        console.log("User photoURL; ", photoURL);
-        console.log("User emailVerified; ", emailVerified);
+
         const newUser = {
           name: displayName,
           email: email,
@@ -87,12 +70,9 @@ function App() {
         // ...
       }).catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         console.log(errorMessage);
       });
@@ -105,14 +85,10 @@ function App() {
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GithubAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
         // The signed-in user info.
         const Loginuser = result.user;
 
         console.log("Login user: ", Loginuser);
-        // console.log("Credential: ", credential);
-        // console.log("Token: ", token);
-        // console.log("User: ", Loginuser);
 
         const { displayName, email, photoURL, emailVerified } = Loginuser;
         console.log("User name; ", displayName);
@@ -129,12 +105,9 @@ function App() {
         // ...
       }).catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
         const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
         console.log(errorMessage);
       });
@@ -144,22 +117,53 @@ function App() {
     signOut(auth).then(() => {
       console.log("Sign Out Successful");
       setUser({})
-    }).catch((error) => {
+    }).catch(() => {
       console.log("Sign Out failed");
     });
   }
   //handling sign up button
   const handleSignUp = (e) => {
-    console.log("sign up successful");
     e.preventDefault();
+
+    if (pass.length < 6) {
+      setError("Password should be at least 6 characters")
+      return;
+    }
+    if (!/(?=.*[A-Z].*[A-Z])/.test(pass)) {
+      setError("Password should be contain two uppercase letters")
+      return;
+    }
+    createUserWithEmailAndPassword(auth, email, pass)
+      .then(result => {
+        const user = result.user;
+        console.log("sign up successful");
+        console.log(user);
+        const newUser = {
+          name: removeEmailDomain(email),
+          email: email,
+          img: null,
+          isVarified: pass ? "true" : "false"
+        }
+        setUser(newUser)
+        setError("success")
+      }).catch(e => {
+        console.log(e.message);
+        setError("email already in use")
+      })
+
+
   }
   const handleEmail = (e) => {
     // console.log("sign out successful");
+
+    setEmail(e.target.value)
     console.log(e.target.value);
     // e.preventDefault();
   }
   const handlePassword = (e) => {
     // console.log("sign out successful");
+
+    setPass(e.target.value)
     console.log(e.target.value);
     // e.preventDefault();
   }
@@ -173,6 +177,7 @@ function App() {
 
     <NameContext.Provider value={[nameMe, house]}>
       <div className="App">
+
         {/* <ConditionalRendering testing=""></ConditionalRendering>
       <ExportTesting></ExportTesting>
       <Countries /> */}
@@ -185,7 +190,7 @@ function App() {
         <button onClick={handleGitSignIn}>Sign In Github</button>
         <button onClick={handleSignOut}>Sign Out</button>
         <br /><br /><br />
-        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword]}></Loginform></div>
+        <div><Loginform handleReg={[handleSignUp, handleEmail, handlePassword, error]}></Loginform></div>
         <br /><br /><br />
 
         {user && <div>
