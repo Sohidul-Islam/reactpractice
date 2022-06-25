@@ -124,12 +124,12 @@ function App() {
   //handling sign up button
   const handleSignUp = (e) => {
     e.preventDefault();
-
+    // password strength validating here
     if (pass.length < 6) {
       setError("Password should be at least 6 characters")
       return;
     }
-    if (!/(?=.*[A-Z].*[A-Z])/.test(pass)) {
+    else if (!/(?=.*[A-Z].*[A-Z])/.test(pass)) {
       setError("Password should be contain two uppercase letters")
       return;
     }
